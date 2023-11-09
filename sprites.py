@@ -52,6 +52,7 @@ class Player(pg.sprite.Sprite):
     def collide_with_item(self):
         if pg.sprite.spritecollide(self, self.game.items, True):
             self.score += 1
+            item_snd.play()
             print(self.score)
 
     def update(self):

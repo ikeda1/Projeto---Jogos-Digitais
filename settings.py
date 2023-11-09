@@ -4,7 +4,7 @@ pg.init()
 pg.mixer.init()
 
 
-TIMER = 5
+TIMER = 60
 SCORE = 0
 MAPNUM = 2
 
@@ -158,5 +158,5 @@ click_snd.set_volume(vol)
 # music = pg.mixer.music.load("snd\\BGM\\")
 # pg.mixer.music.set_volume(vol_msc)
 
-item_snd = pg.mixer.Sound("snd\\Effects\\item.ogg")
+item_snd = pg.mixer.Sound("snd\\Effects\\scoreSound.ogg")
 item_snd.set_volume(vol)

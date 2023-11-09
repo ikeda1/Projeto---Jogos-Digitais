@@ -4,6 +4,7 @@ from os import path
 import settings as s
 # from settings import *
 from sprites import *
+from map import *
 import time
 
 
@@ -17,10 +18,11 @@ class Game:
 
     def load_data(self, map):
         game_folder = path.dirname(__file__)
-        self.map_data = []
-        with open(path.join(game_folder, map), 'rt') as f:
-            for line in f:
-                self.map_data.append(line)
+        self.map = Map(path.join(game_folder, map))
+        # self.map_data = []
+        # with open(path.join(game_folder, map), 'rt') as f:
+        #     for line in f:
+        #         self.map_data.append(line)
 
     def new(self):
         # initialize all variables and do all the setup for a new game
@@ -30,7 +32,7 @@ class Game:
         self.items = pg.sprite.Group()
         self.startTime = time.time()
         print(f"Start Time: {self.startTime}")
-        for row, tiles in enumerate(self.map_data):
+        for row, tiles in enumerate(self.map.data):
             for col, tile in enumerate(tiles):
                 if tile == '1':
                     Wall(self, col, row, 'front')
@@ -38,6 +40,9 @@ class Game:
                     self.player = Player(self, col, row)
                 if tile == '9':
                     Item(self, col, row)
+        
+        self.camera = Camera(self.map.width, self.map.height)
+        self.hud = Hud(TIMER, SCORE)
 
     def run(self):
         # game loop - set self.playing = False to end the game
@@ -55,6 +60,8 @@ class Game:
     def update(self):
         # update portion of the game loop
         self.all_sprites.update()
+        self.camera.update(self.player)
+
         self.tmpTime = time.time()
         self.currTime = abs((self.startTime - self.tmpTime))
         print(f"current time: {self.currTime:.2f}")
@@ -71,7 +78,11 @@ class Game:
     def draw(self):
         self.screen.fill(BGCOLOR)
         # self.draw_grid()
-        self.all_sprites.draw(self.screen)
+        # self.all_sprites.draw(self.screen)
+
+        for sprite in self.all_sprites:
+            self.screen.blit(sprite.image, self.camera.apply(sprite))
+        self.screen.blit(self.hud.hudBackground, (self.hud.x, self.hud.y))
         pg.display.flip()
 
     def events(self):
