@@ -15,6 +15,7 @@ class Game:
         pg.display.set_caption(TITLE)
         self.clock = pg.time.Clock()
         pg.key.set_repeat(500, 100)
+        
 
     def load_data(self, map):
         game_folder = path.dirname(__file__)
@@ -30,16 +31,67 @@ class Game:
         self.all_sprites = pg.sprite.Group()
         self.walls = pg.sprite.Group()
         self.items = pg.sprite.Group()
+        self.floors = pg.sprite.Group()
+        self.player = pg.sprite.Group()
         self.startTime = time.time()
+
         print(f"Start Time: {self.startTime}")
         for row, tiles in enumerate(self.map.data):
             for col, tile in enumerate(tiles):
+                Floor(self, col, row, wooden_floor)
+
+                if tile == '7':
+                    Wall(self, col, row, top_left_corner)
+                if tile == '8':
+                    Wall(self, col, row, top_corner)
+                if tile == '9':
+                    Wall(self, col, row, top_right_corner)
+                if tile == '4':
+                    Wall(self, col, row, left_corner)
+                if tile == '6':
+                    Wall(self, col, row, right_corner)
                 if tile == '1':
-                    Wall(self, col, row, 'front')
+                    Wall(self, col, row, bottom_left_corner)
+                if tile == '2':
+                    Wall(self, col, row, bottom_corner)
+                if tile == '3':
+                    Wall(self, col, row, bottom_right_corner)                                                        
+
+                if tile == 'q':
+                    Wall(self, col, row, wall_corner_left)
+                if tile == 'w':
+                    Wall(self, col, row, wall_top)
+                if tile == 'e':
+                    Wall(self, col, row, wall_corner_right)
+                if tile == 'a':
+                    Wall(self, col, row, wall_left)
+                if tile == 's':
+                    Wall(self, col, row, wall_middle)
+                if tile == 'd':
+                    Wall(self, col, row, wall_right)
+                if tile == 'z':
+                    Floor(self, col, row, wall_bottom_left)
+                if tile == 'x':
+                    Floor(self, col, row, wall_bottom)
+                if tile == 'c':
+                    Floor(self, col, row, wall_bottom_right)
+
+                if tile == 'O':
+                    Wall(self, col, row, obs_top)
+                
+                if tile == 'L':
+                    Floor(self, col, row, obs_bottom)
+
+
                 if tile == 'P':
                     self.player = Player(self, col, row)
-                if tile == '9':
+                    # Floor(self, col, row, wooden_floor)
+
+                if tile == 'I':
+                    # Floor(self, col, row, wooden_floor)
                     Item(self, col, row)
+                # if tile == '.':
+                    # Floor(self, col, row, wooden_floor)
         
         self.camera = Camera(self.map.width, self.map.height)
         self.hud = Hud(TIMER, SCORE)
@@ -60,6 +112,7 @@ class Game:
     def update(self):
         # update portion of the game loop
         self.all_sprites.update()
+        self.player.update()
         self.camera.update(self.player)
 
         self.tmpTime = time.time()
@@ -82,7 +135,9 @@ class Game:
 
         for sprite in self.all_sprites:
             self.screen.blit(sprite.image, self.camera.apply(sprite))
+        self.screen.blit(self.player.image, self.camera.apply(self.player))
         self.screen.blit(self.hud.hudBackground, (self.hud.x, self.hud.y))
+        
         pg.display.flip()
 
     def events(self):

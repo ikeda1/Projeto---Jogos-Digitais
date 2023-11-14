@@ -1,4 +1,5 @@
 import pygame as pg
+# from sprites import Spritesheet
 
 pg.init()
 pg.mixer.init()
@@ -147,6 +148,98 @@ retry_btn3 = pg.image.load("img\\menu\\game_over\\restart3.png")
 quit_btn1 = make_rect(go_draw_group, "img\\menu\\main_menu\\sair1.png", 480, 260, buttonW, buttonH)
 quit_btn2 = make_rect(go_quit, "img\\menu\\main_menu\\sair2.png", 480, 260, buttonW, buttonH)
 quit_btn3 = pg.image.load("img\\menu\\main_menu\\sair3.png")
+
+# Spritesheet
+
+class Spritesheet():
+    def __init__(self, filename):
+        self.sheet = pg.image.load(filename).convert()
+
+    def image_at(self, rectangle, colorkey = (0, 0, 0)):
+        rect = pg.Rect(rectangle)
+        image = pg.Surface(rect.size).convert()
+        image.blit(self.sheet, (0, 0), rect)
+        if colorkey is not None:
+            if colorkey == -1:
+                colorkey = image.get_at((0,0))
+            image.set_colorkey(colorkey, pg.RLEACCEL)
+        return image
+
+    def images_at(self, rects, colorkey = (0, 0, 0)):
+        return [self.image_at(rect, colorkey) for rect in rects]
+    
+    def inver_images_at(self, rects, colorkey = (0, 0, 0)):
+        return [pg.transform.flip(self.image_at(rect, colorkey), True, False) for rect in rects]
+
+
+# spritesheet_image = pg.image.load("img\\game\\map\\map_spritesheet.png").convert_alpha()
+
+# spritesheet = SpriteSheet(spritesheet_image)
+# wall_border_down_right = spritesheet.get_image(32, 32, 1, BLACK)
+# wall_border_bottom = spritesheet.get_image(32, 32, 1, BLACK)
+ss = Spritesheet('img\\game\\map\\map_spritesheet.png')
+# wall_border_bottom_right = ss.image_at((64, 0, 32, 32))
+# wall_border_bottom = ss.image_at((96, 0, 32, 32))
+# wall_border_bottom_left = ss.image_at((128, 0, 32, 32))
+# wall_border_right = ss.image_at((64, 32, 32, 32))
+# wall_empty = ss.image_at((96, 32, 32, 32))
+# wall_border_left = ss.image_at((128, 32, 32, 32))
+# wall_border_top_right = ss.image_at((64, 64, 32, 32))
+# wall_border_top = ss.image_at((96, 64, 32, 32))
+# wall_border_top_left = ss.image_at((128, 64, 32, 32))
+
+
+wall_corner_left = ss.image_at((160, 0, 32, 32))
+wall_top = ss.image_at((192, 0, 32, 32))
+wall_corner_right = ss.image_at((224, 0, 32, 32))
+wall_left = ss.image_at((160, 32, 32, 32))
+wall_middle = ss.image_at((192, 32, 32, 32))
+wall_right = ss.image_at((224, 32, 32, 32))
+wall_bottom_left = ss.image_at((160, 64, 32, 32))
+wall_bottom = ss.image_at((192, 64, 32, 32))
+wall_bottom_right = ss.image_at((224, 64, 32, 32))
+
+top_left_corner = ss.image_at((256, 0, 32, 32))
+top_corner = ss.image_at((288, 0, 32, 32))
+top_right_corner = ss.image_at((320, 0, 32, 32))
+left_corner = ss.image_at((256, 32, 32, 32))
+right_corner = ss.image_at((320, 32, 32, 32))
+bottom_left_corner = ss.image_at((256, 64, 32, 32))
+bottom_corner = ss.image_at((288, 64, 32, 32))
+bottom_right_corner = ss.image_at((320, 64, 32, 32))
+
+
+bed1 = ss.image_at((448, 0, 32, 32))
+bed2 = ss.image_at((448, 32, 32, 32))
+bed3 = ss.image_at((448, 64, 32, 32))
+
+wooden_floor = ss.image_at((0, 96, 32, 32))
+cracked_wooden_floor = ss.image_at((32, 96, 32, 32))
+tile_floor = ss.image_at((0, 128, 32, 32))
+cracked_tile_floor = ss.image_at((0, 160, 32, 32))
+stone_floor = ss.image_at((32, 128, 32 ,32))
+cracked_stone_floor = ss.image_at((32, 160, 32, 32))
+
+wardrobe_1 = ss.image_at((0, 192, 32, 32))
+wardrobe_2 = ss.image_at((0, 224, 32, 32))
+
+bookshelf_1 = ss.image_at((32, 192, 32, 32))
+bookshelf_2 = ss.image_at((32, 224, 32, 32))
+
+drawer_1 = ss.image_at((128, 192, 32, 32))
+drawer_2 = ss.image_at((128, 224, 32, 32))
+
+sink_top = ss.image_at((64, 96, 32, 32))
+cabinet_top = ss.image_at((96, 96, 32, 32))
+cooktop = ss.image_at((128, 96, 32, 32))
+cabinet_door = ss.image_at((64, 128, 32, 32))
+cabinet = ss.image_at((96, 128, 32, 32))
+oven = ss.image_at((128, 128, 32, 32))
+
+obs_top = ss.image_at((192, 96, 32, 32))
+obs_bottom = ss.image_at((192, 128, 32, 32))
+
+
 
 
 # Sound

@@ -3,7 +3,8 @@ from settings import *
 
 class Player(pg.sprite.Sprite):
     def __init__(self, game, x, y):
-        self.groups = game.all_sprites
+        # self.groups = game.all_sprites
+        self.groups = game.player
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
         self.image = pg.Surface((TILESIZE, TILESIZE*1.2))
@@ -66,14 +67,14 @@ class Player(pg.sprite.Sprite):
         self.collide_with_item()
 
 class Wall(pg.sprite.Sprite):
-    def __init__(self, game, x, y, type):
+    def __init__(self, game, x, y, image):
         self.groups = game.all_sprites, game.walls
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
         self.image = pg.Surface((TILESIZE, TILESIZE))
         self.rect = self.image.get_rect()
-        self.image.fill(VIOLET)
-        # self.image = wallFront
+        # self.image.fill(VIOLET)
+        self.image = image
         self.x = x
         self.y = y
         self.rect.x = x * TILESIZE
@@ -91,3 +92,30 @@ class Item(pg.sprite.Sprite):
         self.y = y
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
+
+class Floor(pg.sprite.Sprite):
+    def __init__(self, game, x, y, image):
+        self.groups = game.all_sprites, game.floors
+        pg.sprite.Sprite.__init__(self, self.groups)
+        self.game = game
+        self.image = pg.Surface((TILESIZE, TILESIZE))
+        self.rect = self.image.get_rect()
+        self.image = image
+        self.x = x
+        self.y = y
+        self.rect.x = x * TILESIZE
+        self.rect.y = y * TILESIZE
+
+# class SpriteSheet():
+# 	def __init__(self, image):
+# 		self.sheet = image
+
+# 	def get_image(self, width, height, scale, colour, frame=1):
+# 		image = pg.Surface((width, height)).convert_alpha()
+# 		image.blit(self.sheet, (0, 0), ((frame * width), 0, width, height))
+# 		image = pg.transform.scale(image, (width * scale, height * scale))
+# 		image.set_colorkey(colour)
+
+# 		return image
+
+
