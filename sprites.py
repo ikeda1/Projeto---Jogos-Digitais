@@ -7,28 +7,130 @@ class Player(pg.sprite.Sprite):
         self.groups = game.player
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
-        self.image = pg.Surface((TILESIZE, TILESIZE*1.2))
-        self.image.fill(YELLOW)
+        self.image = pg.Surface((TILESIZE, TILESIZE*PLAYER_HEIGHT_MULTIPLIER))
+        # self.image.fill(YELLOW)
         self.rect = self.image.get_rect()
+        self.image = jack_front[0]
+        self.right = False 
+        self.left = False
+        self.up = False
+        self.down = False
+        self.last_dir = 'down'
+        self.walk_count = 0
         self.vx, self.vy = 0, 0
         self.x = x * TILESIZE
         self.y = y * TILESIZE
         self.score = SCORE
 
+
     def get_keys(self):
         self.vx, self.vy = 0, 0
         keys = pg.key.get_pressed()
+        
+
         if keys[pg.K_LEFT] or keys[pg.K_a]:
             self.vx = -PLAYER_SPEED
+            self.right = False
+            self.left = True
+            self.last_dir = 'left'
+
+        else:
+            self.left = False
+
         if keys[pg.K_RIGHT] or keys[pg.K_d]:
             self.vx = PLAYER_SPEED
+            self.left = False
+            self.right = True
+            self.last_dir = 'right'
+
+        else:
+            self.right = False
+        
         if keys[pg.K_UP] or keys[pg.K_w]:
             self.vy = -PLAYER_SPEED
+            self.down = False
+            self.up = True
+            self.last_dir = 'up'
+
+        else:
+            self.up = False
+
+        # if not keys[pg.K_s] and not keys[pg.K_DOWN]:
+        #     self.down = False
+        #     self.image = jack_front[0]
+
         if keys[pg.K_DOWN] or keys[pg.K_s]:
             self.vy = PLAYER_SPEED
+            self.up = False
+            self.down = True
+            self.last_dir = 'down'
+
+        
+        else:
+            self.down = False
+
         if self.vx != 0 and self.vy != 0:
             self.vx *= 0.7071
             self.vy *= 0.7071
+        
+    
+
+    def update_sprite(self):
+        
+        if self.walk_count >= 9:
+            self.walk_count = 0
+
+        # moving up
+        if self.up:
+            self.image = jack_back[self.walk_count//3]
+            self.walk_count += 1
+            if self.walk_count >= 9:
+                self.walk_count = 0
+        # else:
+        #     self.image = jack_back[0]
+        #     self.walk_count = 0
+
+        # moving down
+        if self.down:
+            self.image = jack_front[self.walk_count//3]
+            self.walk_count += 1
+            if self.walk_count >= 9:
+                self.walk_count = 0
+        # else:
+        #     self.image = jack_front[0]
+        #     self.walk_count = 0
+
+        # moving right
+        if self.right:
+            self.image = jack_right[self.walk_count//3]
+            self.walk_count += 1
+            if self.walk_count >= 9:
+                self.walk_count = 0
+        # else:
+        #     self.image = jack_right[0]
+        #     self.walk_count = 0
+
+        # moving left
+        if self.left:
+            self.image = jack_left[self.walk_count//3]
+            self.walk_count += 1
+            if self.walk_count >= 9:
+                self.walk_count = 0
+        # else:
+        #     self.image = jack_left[0]
+            # self.walk_count = 0
+        else:
+            if self.last_dir == 'left' and not self.left:
+                self.image = jack_left[0]
+            elif self.last_dir == 'right' and not self.right:
+                self.image = jack_right[0]
+            elif self.last_dir == 'up' and not self.up:
+                self.image = jack_back[0]
+            elif self.last_dir == 'down' and not self.down:
+                self.image = jack_front[0]
+        
+
+
 
     def collide_with_walls(self, dir):
         if dir == 'x':

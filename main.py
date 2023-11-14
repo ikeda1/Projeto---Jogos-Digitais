@@ -117,7 +117,7 @@ class Game:
 
         self.tmpTime = time.time()
         self.currTime = abs((self.startTime - self.tmpTime))
-        print(f"current time: {self.currTime:.2f}")
+        # print(f"current time: {self.currTime:.2f}")
 
         if self.currTime >= s.TIMER:
             self.playing = False
@@ -138,6 +138,8 @@ class Game:
         self.screen.blit(self.player.image, self.camera.apply(self.player))
         self.screen.blit(self.hud.hudBackground, (self.hud.x, self.hud.y))
         
+        self.player.update_sprite()
+
         pg.display.flip()
 
     def events(self):

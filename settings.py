@@ -30,7 +30,8 @@ TILESIZE = 32
 GRIDWIDTH = WIDTH / TILESIZE
 GRIDHEIGHT = HEIGHT / TILESIZE
 
-PLAYER_SPEED = 350
+PLAYER_SPEED = 250
+PLAYER_HEIGHT_MULTIPLIER = 1.2
 
 screen = pg.display.set_mode([WIDTH, HEIGHT])
 
@@ -177,70 +178,79 @@ class Spritesheet():
 # spritesheet = SpriteSheet(spritesheet_image)
 # wall_border_down_right = spritesheet.get_image(32, 32, 1, BLACK)
 # wall_border_bottom = spritesheet.get_image(32, 32, 1, BLACK)
-ss = Spritesheet('img\\game\\map\\map_spritesheet.png')
-# wall_border_bottom_right = ss.image_at((64, 0, 32, 32))
-# wall_border_bottom = ss.image_at((96, 0, 32, 32))
-# wall_border_bottom_left = ss.image_at((128, 0, 32, 32))
-# wall_border_right = ss.image_at((64, 32, 32, 32))
-# wall_empty = ss.image_at((96, 32, 32, 32))
-# wall_border_left = ss.image_at((128, 32, 32, 32))
-# wall_border_top_right = ss.image_at((64, 64, 32, 32))
-# wall_border_top = ss.image_at((96, 64, 32, 32))
-# wall_border_top_left = ss.image_at((128, 64, 32, 32))
+mapSS = Spritesheet('img\\game\\map\\map_spritesheet.png')
 
 
-wall_corner_left = ss.image_at((160, 0, 32, 32))
-wall_top = ss.image_at((192, 0, 32, 32))
-wall_corner_right = ss.image_at((224, 0, 32, 32))
-wall_left = ss.image_at((160, 32, 32, 32))
-wall_middle = ss.image_at((192, 32, 32, 32))
-wall_right = ss.image_at((224, 32, 32, 32))
-wall_bottom_left = ss.image_at((160, 64, 32, 32))
-wall_bottom = ss.image_at((192, 64, 32, 32))
-wall_bottom_right = ss.image_at((224, 64, 32, 32))
+wall_corner_left = mapSS.image_at((160, 0, 32, 32))
+wall_top = mapSS.image_at((192, 0, 32, 32))
+wall_corner_right = mapSS.image_at((224, 0, 32, 32))
+wall_left = mapSS.image_at((160, 32, 32, 32))
+wall_middle = mapSS.image_at((192, 32, 32, 32))
+wall_right = mapSS.image_at((224, 32, 32, 32))
+wall_bottom_left = mapSS.image_at((160, 64, 32, 32))
+wall_bottom = mapSS.image_at((192, 64, 32, 32))
+wall_bottom_right = mapSS.image_at((224, 64, 32, 32))
 
-top_left_corner = ss.image_at((256, 0, 32, 32))
-top_corner = ss.image_at((288, 0, 32, 32))
-top_right_corner = ss.image_at((320, 0, 32, 32))
-left_corner = ss.image_at((256, 32, 32, 32))
-right_corner = ss.image_at((320, 32, 32, 32))
-bottom_left_corner = ss.image_at((256, 64, 32, 32))
-bottom_corner = ss.image_at((288, 64, 32, 32))
-bottom_right_corner = ss.image_at((320, 64, 32, 32))
-
-
-bed1 = ss.image_at((448, 0, 32, 32))
-bed2 = ss.image_at((448, 32, 32, 32))
-bed3 = ss.image_at((448, 64, 32, 32))
-
-wooden_floor = ss.image_at((0, 96, 32, 32))
-cracked_wooden_floor = ss.image_at((32, 96, 32, 32))
-tile_floor = ss.image_at((0, 128, 32, 32))
-cracked_tile_floor = ss.image_at((0, 160, 32, 32))
-stone_floor = ss.image_at((32, 128, 32 ,32))
-cracked_stone_floor = ss.image_at((32, 160, 32, 32))
-
-wardrobe_1 = ss.image_at((0, 192, 32, 32))
-wardrobe_2 = ss.image_at((0, 224, 32, 32))
-
-bookshelf_1 = ss.image_at((32, 192, 32, 32))
-bookshelf_2 = ss.image_at((32, 224, 32, 32))
-
-drawer_1 = ss.image_at((128, 192, 32, 32))
-drawer_2 = ss.image_at((128, 224, 32, 32))
-
-sink_top = ss.image_at((64, 96, 32, 32))
-cabinet_top = ss.image_at((96, 96, 32, 32))
-cooktop = ss.image_at((128, 96, 32, 32))
-cabinet_door = ss.image_at((64, 128, 32, 32))
-cabinet = ss.image_at((96, 128, 32, 32))
-oven = ss.image_at((128, 128, 32, 32))
-
-obs_top = ss.image_at((192, 96, 32, 32))
-obs_bottom = ss.image_at((192, 128, 32, 32))
+top_left_corner = mapSS.image_at((256, 0, 32, 32))
+top_corner = mapSS.image_at((288, 0, 32, 32))
+top_right_corner = mapSS.image_at((320, 0, 32, 32))
+left_corner = mapSS.image_at((256, 32, 32, 32))
+right_corner = mapSS.image_at((320, 32, 32, 32))
+bottom_left_corner = mapSS.image_at((256, 64, 32, 32))
+bottom_corner = mapSS.image_at((288, 64, 32, 32))
+bottom_right_corner = mapSS.image_at((320, 64, 32, 32))
 
 
+bed1 = mapSS.image_at((448, 0, 32, 32))
+bed2 = mapSS.image_at((448, 32, 32, 32))
+bed3 = mapSS.image_at((448, 64, 32, 32))
 
+wooden_floor = mapSS.image_at((0, 96, 32, 32))
+cracked_wooden_floor = mapSS.image_at((32, 96, 32, 32))
+tile_floor = mapSS.image_at((0, 128, 32, 32))
+cracked_tile_floor = mapSS.image_at((0, 160, 32, 32))
+stone_floor = mapSS.image_at((32, 128, 32 ,32))
+cracked_stone_floor = mapSS.image_at((32, 160, 32, 32))
+
+wardrobe_1 = mapSS.image_at((0, 192, 32, 32))
+wardrobe_2 = mapSS.image_at((0, 224, 32, 32))
+
+bookshelf_1 = mapSS.image_at((32, 192, 32, 32))
+bookshelf_2 = mapSS.image_at((32, 224, 32, 32))
+
+drawer_1 = mapSS.image_at((128, 192, 32, 32))
+drawer_2 = mapSS.image_at((128, 224, 32, 32))
+
+sink_top = mapSS.image_at((64, 96, 32, 32))
+cabinet_top = mapSS.image_at((96, 96, 32, 32))
+cooktop = mapSS.image_at((128, 96, 32, 32))
+cabinet_door = mapSS.image_at((64, 128, 32, 32))
+cabinet = mapSS.image_at((96, 128, 32, 32))
+oven = mapSS.image_at((128, 128, 32, 32))
+
+obs_top = mapSS.image_at((192, 96, 32, 32))
+obs_bottom = mapSS.image_at((192, 128, 32, 32))
+
+jackSS = Spritesheet('img\\PLAYER\\Males\\M_08.png')
+jack_front = jackSS.images_at([(2, 2, 12, 15), (2, 19, 12, 15), (2, 36, 12, 15)])
+jack_front[0] = pg.transform.scale(jack_front[0],[TILESIZE, TILESIZE*PLAYER_HEIGHT_MULTIPLIER])
+jack_front[1] = pg.transform.scale(jack_front[1],[TILESIZE, TILESIZE*PLAYER_HEIGHT_MULTIPLIER])
+jack_front[2] = pg.transform.scale(jack_front[2],[TILESIZE, TILESIZE*PLAYER_HEIGHT_MULTIPLIER])
+
+jack_back = jackSS.images_at([(34, 2, 12, 15), (34, 19, 12, 15), (34, 36, 12, 15)])
+jack_back[0] = pg.transform.scale(jack_back[0],[TILESIZE, TILESIZE*PLAYER_HEIGHT_MULTIPLIER])
+jack_back[1] = pg.transform.scale(jack_back[1],[TILESIZE, TILESIZE*PLAYER_HEIGHT_MULTIPLIER])
+jack_back[2] = pg.transform.scale(jack_back[2],[TILESIZE, TILESIZE*PLAYER_HEIGHT_MULTIPLIER])
+
+jack_right = jackSS.images_at([(19, 2, 10, 15), (19, 19, 10, 15), (19, 36, 10, 15)])
+jack_right[0] = pg.transform.scale(jack_right[0],[TILESIZE, TILESIZE*PLAYER_HEIGHT_MULTIPLIER])
+jack_right[1] = pg.transform.scale(jack_right[1],[TILESIZE, TILESIZE*PLAYER_HEIGHT_MULTIPLIER])
+jack_right[2] = pg.transform.scale(jack_right[2],[TILESIZE, TILESIZE*PLAYER_HEIGHT_MULTIPLIER])
+
+jack_left = jackSS.inver_images_at([(19, 2, 10, 15), (19, 19, 10, 15), (19, 36, 10, 15)])
+jack_left[0] = pg.transform.scale(jack_left[0],[TILESIZE, TILESIZE*PLAYER_HEIGHT_MULTIPLIER])
+jack_left[1] = pg.transform.scale(jack_left[1],[TILESIZE, TILESIZE*PLAYER_HEIGHT_MULTIPLIER])
+jack_left[2] = pg.transform.scale(jack_left[2],[TILESIZE, TILESIZE*PLAYER_HEIGHT_MULTIPLIER])
 
 # Sound
 vol = 0.5
