@@ -1,4 +1,5 @@
 import pygame as pg
+
 # from sprites import Spritesheet
 
 pg.init()
@@ -6,8 +7,10 @@ pg.mixer.init()
 
 
 TIMER = 60
+TIMEARR = [80, 70, 60]
 SCORE = 0
-MAPNUM = 2
+PHASESCORE = [5, 8, 12]
+MAPNUM = 1
 
 # define some colors (R, G, B)
 WHITE = (255, 255, 255)
@@ -45,25 +48,25 @@ def make_rect(group, path, l, t, w, h,scale=False, nW=0, nH=0):
 
     return temp
 
-# Draw groups
-## Menu
-mm_draw_group1 = pg.sprite.Group()
-mm_start = pg.sprite.Group()
-mm_option = pg.sprite.Group()
-mm_inst = pg.sprite.Group()
-mm_quit = pg.sprite.Group()
-## option
-option_draw_group = pg.sprite.Group()
-snd_add_hover = pg.sprite.Group()
-snd_minus_hover = pg.sprite.Group()
-snd_on_button = pg.sprite.Group()
-snd_on_hover = pg.sprite.Group()
-snd_off_button = pg.sprite.Group()
-snd_off_hover = pg.sprite.Group()
-# Close Button
-close_draw_group = pg.sprite.Group()
-close_hover = pg.sprite.Group()
-start_draw_group = pg.sprite.Group()
+# # Draw groups
+# ## Menu
+# mm_draw_group1 = pg.sprite.Group()
+# mm_start = pg.sprite.Group()
+# mm_option = pg.sprite.Group()
+# mm_inst = pg.sprite.Group()
+# mm_quit = pg.sprite.Group()
+# ## option
+# option_draw_group = pg.sprite.Group()
+# snd_add_hover = pg.sprite.Group()
+# snd_minus_hover = pg.sprite.Group()
+# snd_on_button = pg.sprite.Group()
+# snd_on_hover = pg.sprite.Group()
+# snd_off_button = pg.sprite.Group()
+# snd_off_hover = pg.sprite.Group()
+# # Close Button
+# close_draw_group = pg.sprite.Group()
+# close_hover = pg.sprite.Group()
+# start_draw_group = pg.sprite.Group()
 
 
 # Loading images
@@ -92,9 +95,19 @@ go_draw_group = pg.sprite.Group()
 go_quit = pg.sprite.Group()
 go_retry = pg.sprite.Group()
 
+## Continue game
+continue_draw_group = pg.sprite.Group()
+continue_start = pg.sprite.Group()
+
+# Score
+score_txt_draw_group = pg.sprite.Group()
+score_draw_group = pg.sprite.Group()
+
 # Images
 BGMENU = pg.image.load("img\\menu\\main_menu\\restaurante.jpg").convert()
 BGMENU = pg.transform.scale(BGMENU, [WIDTH, HEIGHT])
+MAINMENUIMAGE = pg.image.load("img\\menu\\main_menu\\2012.jpg").convert()
+MAINMENUIMAGE = pg.transform.scale(MAINMENUIMAGE, [WIDTH, HEIGHT])
 
 
 # mm_draw_group
@@ -141,13 +154,29 @@ snd_mute = make_rect(snd_off_button, "img\\menu\\options\\botao_som_off_02.png",
 snd_mute_h = make_rect(snd_off_hover, "img\\menu\\options\\botao_som_off_03.png", (WIDTH/2)-25, (HEIGHT/2), snd_btn_H, snd_btn_W)
 snd_mute_c = pg.image.load("img\\menu\\options\\botao_som_off.png")
 
+# Continue draw group
+continueX, continueY = (WIDTH//2)-(buttonW//2), (HEIGHT//2)-(buttonH//2)
+continue_btn1 = make_rect(continue_draw_group, "img\\menu\\main_menu\\start1.png", continueX, continueY, buttonW, buttonH)
+continue_btn2 = make_rect(continue_start, "img\\menu\\main_menu\\start2.png", continueX, continueY, buttonW, buttonH)
+continue_btn3 = pg.image.load("img\\menu\\main_menu\\start3.png")
+
+font = pg.font.Font('freesansbold.ttf', 32)
+text = font.render('Proxima fase?', True, BLACK, WHITE)
+textRect = text.get_rect()
+textRect.center = (WIDTH//2, (HEIGHT//2)-100)
+
+# End game
+endText = font.render('Parabéns, você chegou ao fim do jogo!', True, BLACK, WHITE)
+endTextRect = text.get_rect()
+endTextRect.center = ((WIDTH//2)-160, (HEIGHT//2)-100)
 
 # GO screen
-retry_btn1 = make_rect(go_draw_group, "img\\menu\\game_over\\restart1.png", 80, 260, buttonW, buttonH)
-retry_btn2 = make_rect(go_retry, "img\\menu\\game_over\\restart2.png", 80, 260, buttonW, buttonH)
+retryX, retryY = (WIDTH//2)-(1.5*buttonW), (HEIGHT//2)+150
+retry_btn1 = make_rect(go_draw_group, "img\\menu\\game_over\\restart1.png", retryX, retryY, buttonW, buttonH)
+retry_btn2 = make_rect(go_retry, "img\\menu\\game_over\\restart2.png", retryX, retryY, buttonW, buttonH)
 retry_btn3 = pg.image.load("img\\menu\\game_over\\restart3.png")
-quit_btn1 = make_rect(go_draw_group, "img\\menu\\main_menu\\sair1.png", 480, 260, buttonW, buttonH)
-quit_btn2 = make_rect(go_quit, "img\\menu\\main_menu\\sair2.png", 480, 260, buttonW, buttonH)
+quit_btn1 = make_rect(go_draw_group, "img\\menu\\main_menu\\sair1.png", retryX+2*buttonW, retryY, buttonW, buttonH)
+quit_btn2 = make_rect(go_quit, "img\\menu\\main_menu\\sair2.png", retryX+2*buttonW, retryY, buttonW, buttonH)
 quit_btn3 = pg.image.load("img\\menu\\main_menu\\sair3.png")
 
 # Spritesheet
@@ -231,6 +260,37 @@ oven = mapSS.image_at((128, 128, 32, 32))
 obs_top = mapSS.image_at((192, 96, 32, 32))
 obs_bottom = mapSS.image_at((192, 128, 32, 32))
 
+# Items
+backpack = pg.image.load('img\\game\\itens\\backpack.png')
+backpack = pg.transform.scale(backpack,(TILESIZE, TILESIZE))
+bandage = pg.image.load('img\\game\\itens\\bandage.png')
+bandage = pg.transform.scale(bandage, (TILESIZE, TILESIZE))
+food1 = pg.image.load('img\\game\\itens\\canned_food_1.png')
+food1 = pg.transform.scale(food1 ,(TILESIZE, TILESIZE))
+food2 = pg.image.load('img\\game\\itens\\canned_food_2.png')
+food2 = pg.transform.scale(food2 ,(TILESIZE, TILESIZE))
+food3 = pg.image.load('img\\game\\itens\\canned_food_3.png')
+food3 = pg.transform.scale(food3 ,(TILESIZE, TILESIZE))
+food4 = pg.image.load('img\\game\\itens\\canned_food_4.png')
+food4 = pg.transform.scale(food4 ,(TILESIZE, TILESIZE))
+flashlight = pg.image.load('img\\game\\itens\\flashlight_1.png')
+flashlight = pg.transform.scale(flashlight ,(TILESIZE, TILESIZE))
+hammer = pg.image.load('img\\game\\itens\\hammer.png')
+hammer = pg.transform.scale(hammer ,(TILESIZE, TILESIZE))
+pills1 = pg.image.load('img\\game\\itens\\pill_1.png')
+pills1 = pg.transform.scale(pills1 ,(TILESIZE//2, TILESIZE))
+pills2 = pg.image.load('img\\game\\itens\\pills_2.png')
+pills2 = pg.transform.scale(pills2 ,(TILESIZE//2, TILESIZE))
+rope = pg.image.load('img\\game\\itens\\rope.png')
+rope = pg.transform.scale(rope ,(TILESIZE, TILESIZE))
+water = pg.image.load('img\\game\\itens\\water.png')
+water = pg.transform.scale(water ,(TILESIZE//2, TILESIZE))
+
+
+
+
+
+# Characters
 jackSS = Spritesheet('img\\PLAYER\\Males\\M_08.png')
 jack_front = jackSS.images_at([(2, 2, 12, 15), (2, 19, 12, 15), (2, 36, 12, 15)])
 jack_front[0] = pg.transform.scale(jack_front[0],[TILESIZE, TILESIZE*PLAYER_HEIGHT_MULTIPLIER])
@@ -252,14 +312,37 @@ jack_left[0] = pg.transform.scale(jack_left[0],[TILESIZE, TILESIZE*PLAYER_HEIGHT
 jack_left[1] = pg.transform.scale(jack_left[1],[TILESIZE, TILESIZE*PLAYER_HEIGHT_MULTIPLIER])
 jack_left[2] = pg.transform.scale(jack_left[2],[TILESIZE, TILESIZE*PLAYER_HEIGHT_MULTIPLIER])
 
+# HUD
+textSS = Spritesheet('img\\game\\hud\\words.png')
+textTime = textSS.image_at([1, 1, 100, 21])
+textItem = textSS.image_at([108, 1, 94, 21])
+textScore = textSS.image_at([2, 25, 115, 21])
+
+
+# Score
+scoreArr = [str(SCORE)]
+nums = [pg.image.load('img\\game\\hud\\num_0.png'), pg.image.load('img\\game\\hud\\num_1.png'), pg.image.load('img\\game\\hud\\num_2.png'), pg.image.load('img\\game\\hud\\num_3.png'), pg.image.load('img\\game\\hud\\num_4.png'), pg.image.load('img\\game\\hud\\num_5.png'), pg.image.load('img\\game\\hud\\num_6.png'), pg.image.load('img\\game\\hud\\num_7.png'), pg.image.load('img\\game\\hud\\num_8.png'), pg.image.load('img\\game\\hud\\num_9.png')]
+# for i in len(nums):
+    # nums[i] = pg.transform.scale(nums[i], [])
+numsCount = []
+
+countW = 90
+countH = 150
+for i in range(4):
+    numsCount.append(pg.transform.scale(nums[i], [countW, countH]))
+
+for i in range(len(nums)):
+    nums[i] = pg.transform.scale(nums[i], [15, 25])
+# score_text = make_rect(score_txt_draw_group, "img\\pontuacao.png", 786, 20, 256, 76, True, 256, 76)
+
 # Sound
 vol = 0.5
 vol_msc = 0.05
 click_snd = pg.mixer.Sound("snd\\Effects\\btn_click.ogg")
 click_snd.set_volume(vol)
 
-# music = pg.mixer.music.load("snd\\BGM\\")
-# pg.mixer.music.set_volume(vol_msc)
+music = pg.mixer.music.load("snd\\BGM\\musicaMenu.mp3")
+pg.mixer.music.set_volume(vol_msc)
 
 item_snd = pg.mixer.Sound("snd\\Effects\\scoreSound.ogg")
 item_snd.set_volume(vol)

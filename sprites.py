@@ -1,5 +1,6 @@
 import pygame as pg
-from settings import *
+# from settings import *
+import settings as s
 
 class Player(pg.sprite.Sprite):
     def __init__(self, game, x, y):
@@ -7,10 +8,10 @@ class Player(pg.sprite.Sprite):
         self.groups = game.player
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
-        self.image = pg.Surface((TILESIZE, TILESIZE*PLAYER_HEIGHT_MULTIPLIER))
+        self.image = pg.Surface((s.TILESIZE, s.TILESIZE*s.PLAYER_HEIGHT_MULTIPLIER))
         # self.image.fill(YELLOW)
         self.rect = self.image.get_rect()
-        self.image = jack_front[0]
+        self.image = s.jack_front[0]
         self.right = False 
         self.left = False
         self.up = False
@@ -18,9 +19,10 @@ class Player(pg.sprite.Sprite):
         self.last_dir = 'down'
         self.walk_count = 0
         self.vx, self.vy = 0, 0
-        self.x = x * TILESIZE
-        self.y = y * TILESIZE
-        self.score = SCORE
+        self.x = x * s.TILESIZE
+        self.y = y * s.TILESIZE
+        self.score = s.SCORE
+        self.scoreArr = list(map(int, str(self.score)))
 
 
     def get_keys(self):
@@ -29,7 +31,7 @@ class Player(pg.sprite.Sprite):
         
 
         if keys[pg.K_LEFT] or keys[pg.K_a]:
-            self.vx = -PLAYER_SPEED
+            self.vx = -s.PLAYER_SPEED
             self.right = False
             self.left = True
             self.last_dir = 'left'
@@ -38,7 +40,7 @@ class Player(pg.sprite.Sprite):
             self.left = False
 
         if keys[pg.K_RIGHT] or keys[pg.K_d]:
-            self.vx = PLAYER_SPEED
+            self.vx = s.PLAYER_SPEED
             self.left = False
             self.right = True
             self.last_dir = 'right'
@@ -47,7 +49,7 @@ class Player(pg.sprite.Sprite):
             self.right = False
         
         if keys[pg.K_UP] or keys[pg.K_w]:
-            self.vy = -PLAYER_SPEED
+            self.vy = -s.PLAYER_SPEED
             self.down = False
             self.up = True
             self.last_dir = 'up'
@@ -60,7 +62,7 @@ class Player(pg.sprite.Sprite):
         #     self.image = jack_front[0]
 
         if keys[pg.K_DOWN] or keys[pg.K_s]:
-            self.vy = PLAYER_SPEED
+            self.vy = s.PLAYER_SPEED
             self.up = False
             self.down = True
             self.last_dir = 'down'
@@ -82,7 +84,7 @@ class Player(pg.sprite.Sprite):
 
         # moving up
         if self.up:
-            self.image = jack_back[self.walk_count//3]
+            self.image = s.jack_back[self.walk_count//3]
             self.walk_count += 1
             if self.walk_count >= 9:
                 self.walk_count = 0
@@ -92,7 +94,7 @@ class Player(pg.sprite.Sprite):
 
         # moving down
         if self.down:
-            self.image = jack_front[self.walk_count//3]
+            self.image = s.jack_front[self.walk_count//3]
             self.walk_count += 1
             if self.walk_count >= 9:
                 self.walk_count = 0
@@ -102,7 +104,7 @@ class Player(pg.sprite.Sprite):
 
         # moving right
         if self.right:
-            self.image = jack_right[self.walk_count//3]
+            self.image = s.jack_right[self.walk_count//3]
             self.walk_count += 1
             if self.walk_count >= 9:
                 self.walk_count = 0
@@ -112,7 +114,7 @@ class Player(pg.sprite.Sprite):
 
         # moving left
         if self.left:
-            self.image = jack_left[self.walk_count//3]
+            self.image = s.jack_left[self.walk_count//3]
             self.walk_count += 1
             if self.walk_count >= 9:
                 self.walk_count = 0
@@ -121,13 +123,13 @@ class Player(pg.sprite.Sprite):
             # self.walk_count = 0
         else:
             if self.last_dir == 'left' and not self.left:
-                self.image = jack_left[0]
+                self.image = s.jack_left[0]
             elif self.last_dir == 'right' and not self.right:
-                self.image = jack_right[0]
+                self.image = s.jack_right[0]
             elif self.last_dir == 'up' and not self.up:
-                self.image = jack_back[0]
+                self.image = s.jack_back[0]
             elif self.last_dir == 'down' and not self.down:
-                self.image = jack_front[0]
+                self.image = s.jack_front[0]
         
 
 
@@ -155,8 +157,9 @@ class Player(pg.sprite.Sprite):
     def collide_with_item(self):
         if pg.sprite.spritecollide(self, self.game.items, True):
             self.score += 1
-            item_snd.play()
-            print(self.score)
+            self.scoreArr = list(map(int, str(self.score)))
+            s.item_snd.play()
+            # print(self.scoreArr)
 
     def update(self):
         self.get_keys()
@@ -173,40 +176,41 @@ class Wall(pg.sprite.Sprite):
         self.groups = game.all_sprites, game.walls
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
-        self.image = pg.Surface((TILESIZE, TILESIZE))
+        self.image = pg.Surface((s.TILESIZE, s.TILESIZE))
         self.rect = self.image.get_rect()
         # self.image.fill(VIOLET)
         self.image = image
         self.x = x
         self.y = y
-        self.rect.x = x * TILESIZE
-        self.rect.y = y * TILESIZE
+        self.rect.x = x * s.TILESIZE
+        self.rect.y = y * s.TILESIZE
 
 class Item(pg.sprite.Sprite):
-    def __init__(self, game, x, y):
+    def __init__(self, game, x, y, item):
         self.groups = game.all_sprites, game.items
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
-        self.image = pg.Surface((TILESIZE, TILESIZE))
-        self.image.fill(GREEN)
+        self.image = pg.Surface((s.TILESIZE, s.TILESIZE))
+        # self.image.fill(s.GREEN)
         self.rect = self.image.get_rect()
-        self.x = x
-        self.y = y
-        self.rect.x = x * TILESIZE
-        self.rect.y = y * TILESIZE
+        self.image = item
+        self.x = x + s.TILESIZE
+        self.y = y + s.TILESIZE
+        self.rect.x = x * s.TILESIZE
+        self.rect.y = y * s.TILESIZE
 
 class Floor(pg.sprite.Sprite):
     def __init__(self, game, x, y, image):
         self.groups = game.all_sprites, game.floors
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
-        self.image = pg.Surface((TILESIZE, TILESIZE))
+        self.image = pg.Surface((s.TILESIZE, s.TILESIZE))
         self.rect = self.image.get_rect()
         self.image = image
         self.x = x
         self.y = y
-        self.rect.x = x * TILESIZE
-        self.rect.y = y * TILESIZE
+        self.rect.x = x * s.TILESIZE
+        self.rect.y = y * s.TILESIZE
 
 # class SpriteSheet():
 # 	def __init__(self, image):
