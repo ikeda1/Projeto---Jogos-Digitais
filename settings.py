@@ -1,16 +1,22 @@
 import pygame as pg
+from os import path
 
 # from sprites import Spritesheet
 
 pg.init()
 pg.mixer.init()
 
+GAMEFOLDER = path.dirname(__file__)
 
 TIMER = 60
-TIMEARR = [80, 70, 60]
+TIMEARR = [40, 40, 40]
 SCORE = 0
+TOTALSCORE = 0
+RECORDS = 0
 PHASESCORE = [5, 8, 12]
 MAPNUM = 1
+FONTE = pg.font.SysFont("Monospace", 60, True, True)
+
 
 # define some colors (R, G, B)
 WHITE = (255, 255, 255)

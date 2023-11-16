@@ -157,6 +157,7 @@ class Player(pg.sprite.Sprite):
     def collide_with_item(self):
         if pg.sprite.spritecollide(self, self.game.items, True):
             self.score += 1
+            s.TOTALSCORE += 1
             self.scoreArr = list(map(int, str(self.score)))
             s.item_snd.play()
             # print(self.scoreArr)

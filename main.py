@@ -5,12 +5,14 @@ import settings as s
 # from settings import *
 from sprites import *
 from map import *
+from records import *
 import time
 
 
 class Game:
     def __init__(self):
         pg.init()
+        pg.font.init()
         self.screen = pg.display.set_mode((WIDTH, HEIGHT))
         pg.display.set_caption(TITLE)
         pg.key.set_repeat(500, 100)
@@ -21,12 +23,14 @@ class Game:
         
 
     def load_data(self, map):
-        game_folder = path.dirname(__file__)
-        self.map = Map(path.join(game_folder, map))
+        self.map = Map(path.join(s.GAMEFOLDER, map))
         # self.map_data = []
         # with open(path.join(game_folder, map), 'rt') as f:
         #     for line in f:
         #         self.map_data.append(line)
+
+    def load_records(self, records):
+        self.records = Record(path.join(s.GAMEFOLDER, records))
 
     def new(self):
         # initialize all variables and do all the setup for a new game
@@ -36,6 +40,7 @@ class Game:
         self.floors = pg.sprite.Group()
         self.player = pg.sprite.Group()
         self.load_data(f"map{self.phase+1}.txt")
+        self.load_records("records.txt")
         self.startTime = time.time()
         self.remainingTime = TIMEARR[self.phase]
 
@@ -450,6 +455,9 @@ class Game:
 
     def game_over(self):
         # print("GO screen") # DEBUG
+        self.set_record("records.txt")
+        text = f"HIGHSCORE: {s.RECORDS}"
+        txttela = s.FONTE.render(text, False, (255,255,255))
         self.final_loop = True
         s.MAPNUM = 1
         # pg.mixer.init()
@@ -459,6 +467,7 @@ class Game:
         while self.final_loop:
             
             self.screen.blit(BGMENU, (0, 0))
+            self.screen.blit(txttela, (300, 300))
 
             s.go_draw_group.draw(self.screen)
             
@@ -500,6 +509,9 @@ class Game:
     
     def end_game(self):
         # print("GO screen") # DEBUG
+        self.set_record("records.txt")
+        text = f"HIGHSCORE: {s.RECORDS}"
+        txttela = s.FONTE.render(text, False, (255,255,255))
         self.final_loop = True
         s.MAPNUM = 1
         # pg.mixer.init()
@@ -510,8 +522,8 @@ class Game:
             
             self.screen.blit(BGMENU, (0, 0))
             self.screen.blit(endText, endTextRect)
-
-
+            self.screen.blit(s.TXTTELA, (300, 300))
+            
             s.go_draw_group.draw(self.screen)
             
             if self.hover_check(s.retry_btn1):
@@ -559,6 +571,15 @@ class Game:
                 if event.key == pg.K_ESCAPE:
                     s.MAPNUM+=1
                     self.GO_screen = False
+
+    def set_record(self, records):
+        if s.TOTALSCORE > int(s.RECORDS):
+            s.RECORDS = s.TOTALSCORE
+        
+        self.records = WriteRecord(path.join(s.GAMEFOLDER, records))
+
+            
+        
 
 # create the game object
 g = Game()
