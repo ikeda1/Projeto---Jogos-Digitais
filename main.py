@@ -456,7 +456,7 @@ class Game:
     def game_over(self):
         # print("GO screen") # DEBUG
         self.set_record("records.txt")
-        text = f"HIGHSCORE: {s.RECORDS}"
+        text = f"Pontuação Máxima: {s.RECORDS}"
         txttela = s.FONTE.render(text, False, (255,255,255))
         self.final_loop = True
         s.MAPNUM = 1
@@ -510,7 +510,7 @@ class Game:
     def end_game(self):
         # print("GO screen") # DEBUG
         self.set_record("records.txt")
-        text = f"HIGHSCORE: {s.RECORDS}"
+        text = f"Pontuação Máxima: {s.RECORDS}"
         txttela = s.FONTE.render(text, False, (255,255,255))
         self.final_loop = True
         s.MAPNUM = 1
@@ -522,7 +522,7 @@ class Game:
             
             self.screen.blit(BGMENU, (0, 0))
             self.screen.blit(endText, endTextRect)
-            self.screen.blit(s.TXTTELA, (300, 300))
+            self.screen.blit(txttela, (200, 300))
             
             s.go_draw_group.draw(self.screen)
             

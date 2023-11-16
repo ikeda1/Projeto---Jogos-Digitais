@@ -9,11 +9,11 @@ pg.mixer.init()
 GAMEFOLDER = path.dirname(__file__)
 
 TIMER = 60
-TIMEARR = [40, 40, 40]
+TIMEARR = [40, 40, 60]
 SCORE = 0
 TOTALSCORE = 0
 RECORDS = 0
-PHASESCORE = [5, 8, 12]
+PHASESCORE = [1, 0, 0]
 MAPNUM = 1
 FONTE = pg.font.SysFont("Monospace", 60, True, True)
 
